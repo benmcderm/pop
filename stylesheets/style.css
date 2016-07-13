@@ -1,0 +1,52 @@
+.board {
+  margin: 100px auto;
+  width: 300px;
+  height: 320px;
+  overflow: hidden;
+}
+
+.column {
+  height: 300px;
+  width: 50px;
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+.dot {
+  float: left;
+  position: relative;
+  margin: 10px;;
+  height: 30px;
+  width: 30px;
+  border: 2px solid black;
+  border-radius: 50%;
+  background-color: blue;
+  list-style: none;
+  transition: background 200ms, top 200ms, right 200ms, left 200ms, bottom 200ms;
+}
+
+.dot:hover {
+  opacity: .6;
+}
+
+
+.blue {
+  background-color: #8CBEFF;
+}
+
+.purple {
+  background-color: #9C5DB5;
+}
+
+.yellow {
+  background-color: #E6DB21;
+}
+
+.red {
+  background-color: #EF5D42;
+}
+
+.green {
+  background-color: #8CEB94;
+}
