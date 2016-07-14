@@ -16,6 +16,7 @@ header {
   margin: 30px auto;
   width: 408px;
   height: 416px;
+  transform: rotate(180deg);
   overflow: hidden;
 }
 
@@ -43,13 +44,16 @@ header {
   margin: 7px;;
   height: 50px;
   width: 50px;
-  border: 2px solid black;
+  border: 1.5px solid black;
   border-radius: 50%;
   background-color: blue;
   list-style: none;
-  transition: display 2000ms, top 200ms, right 200ms, left 200ms, bottom 200ms;
   animation: entering 1000ms;
   opacity: 1;
+}
+
+.dot[linked] {
+  opacity: .6;
 }
 
 @keyframes entering {
@@ -71,8 +75,28 @@ header {
   }
 
 .dot:hover {
-  opacity: .6;
+  -webkit-transform: rotateX(20deg);
+  transform: rotateX(20deg);
+  box-shadow: 2px -5px 2px 0 rgba(50,50,50,.2);
 }
+
+@keyframes flapping {
+    0% {
+        opacity: 0;
+    }
+    25% {
+        opacity: .25;
+    }
+    50% {
+        opacity: .5;
+    }
+    75% {
+        opacity: .75;
+    }
+    100% {
+        opacity: 1;
+    }
+  }
 
 
 .blue {

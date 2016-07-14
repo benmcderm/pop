@@ -17,7 +17,6 @@ function randomColor() {
 
 Board.prototype.resetBoard = function () {
   $(`li`).removeAttr('pos');
-  console.log("something was removed");
   $(`ul`).each(function (i) {
     $(this).children().each(function(j) {
       $(this).attr('pos', `${i},${j}`);
@@ -78,7 +77,7 @@ Board.prototype.onDotHover = function (e) {
       if (isAdjacentTo(e.currentTarget)) {
         if (checkForSimilarity(candidates)) {
           selectedDots.push(e.currentTarget)
-          console.log(candidates);
+          $(e.currentTarget).attr('linked', 'true')
         }
       } else {
         candidates.pop();
@@ -86,6 +85,23 @@ Board.prototype.onDotHover = function (e) {
     }
   }
 };
+
+// function checkForSquare(dot) {
+//   let sD = [[0,-1], [1,-1], [1,0]];
+//
+//   for (var i = 0; i < selectedDots.length; i++) {
+//     let sdotx = $(selectedDots[i]).attr('pos').slice(0,1)
+//     let sdoty = $(selectedDots[i]).attr('pos').slice(2)
+//
+//     for (var j = 0; j < sD.length; j++) {
+//       if ((sdotx + sD[i][j]) !== 0 && (sdoty + sD[i][j]) !== 0) {
+//         console.log("not square!");
+//       return false;
+//       }
+//     }
+//   }
+//   return true;
+// };
 
 function checkForSimilarity (dots) {
   for (var i = 0; i < dots.length - 1; i++) {
@@ -121,6 +137,9 @@ function isAdjacentTo(dot) {
 
 Board.prototype.onStopDragging = function () {
   this.dragging = false;
+  for (var i = 0; i < selectedDots.length; i++) {
+    $(selectedDots[i]).removeAttr('linked');
+  }
   if (selectedDots.length < 2) {
     selectedDots = [];
     candidates = [];
@@ -128,6 +147,9 @@ Board.prototype.onStopDragging = function () {
   }
   if (checkForSimilarity(selectedDots)) {
     selectedDots.forEach((dot) => {
+      // if (checkForSquare(dot)) {
+      //   score += 3;
+      // }
       let columnNumber = $(dot).attr('pos').slice(0,1);
       let rowNumber = 5;
       this.addDot(randomColor(), [columnNumber, rowNumber])
