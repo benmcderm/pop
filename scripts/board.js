@@ -4,7 +4,6 @@ const colors = ['red', 'blue', 'yellow', 'green', 'purple'];
 let selectedDots = [];
 let candidates = [];
 
-
 function Board() {
   this.grid = [];
   this.dragging = false;
@@ -47,7 +46,7 @@ Board.prototype.addDot = function (color, pos) {
 Board.prototype.removeDot = function (pos) {
   let newPos = $(pos).attr('pos');
   this.setDot(undefined, newPos);
-  $(pos).hide('slow', () =>{
+  $(pos).hide('medium', () =>{
     $(pos).remove();
     this.resetBoard();
   });

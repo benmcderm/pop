@@ -48,8 +48,11 @@ header {
   border-radius: 50%;
   background-color: blue;
   list-style: none;
-  animation: entering 1000ms;
+  animation: entering 700ms;
   opacity: 1;
+  transition: transform ease-in-out 500ms;
+
+
 }
 
 .dot[linked] {
@@ -61,12 +64,12 @@ header {
         opacity: 0;
     }
     25% {
-        opacity: .25;
+        opacity: 0;
     }
-    50% {
-        opacity: .5;
+    60% {
+        opacity: 0;
     }
-    75% {
+    80% {
         opacity: .75;
     }
     100% {
@@ -78,25 +81,8 @@ header {
   -webkit-transform: rotateX(20deg);
   transform: rotateX(20deg);
   box-shadow: 2px -5px 2px 0 rgba(50,50,50,.2);
+  transition: transform ease-in-out 150ms;
 }
-
-@keyframes flapping {
-    0% {
-        opacity: 0;
-    }
-    25% {
-        opacity: .25;
-    }
-    50% {
-        opacity: .5;
-    }
-    75% {
-        opacity: .75;
-    }
-    100% {
-        opacity: 1;
-    }
-  }
 
 
 .blue {
