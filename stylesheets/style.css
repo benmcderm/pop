@@ -1,12 +1,34 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+header {
+  margin: auto;
+}
+
+.title {
+  text-align: center;
+  margin: auto;
+}
+
 .board {
-  margin: 100px auto;
+  margin: 30px auto;
   width: 300px;
   height: 320px;
   overflow: hidden;
 }
 
+.score {
+  position: relative;
+  margin: auto;
+  height: 20px;
+  width: 50px;
+  font-size: 30px;
+  text-align: center;
+}
+
 .column {
-  height: 300px;
+  height: 348px;
   width: 50px;
   float: left;
   margin: 0;
@@ -23,7 +45,7 @@
   border-radius: 50%;
   background-color: blue;
   list-style: none;
-  transition: background 200ms, top 200ms, right 200ms, left 200ms, bottom 200ms;
+  transition: display 2000ms, top 200ms, right 200ms, left 200ms, bottom 200ms;
 }
 
 .dot:hover {
