@@ -9,12 +9,13 @@ header {
 .title {
   text-align: center;
   margin: auto;
+  font-size: 50px;
 }
 
 .board {
   margin: 30px auto;
-  width: 300px;
-  height: 320px;
+  width: 408px;
+  height: 416px;
   overflow: hidden;
 }
 
@@ -23,13 +24,14 @@ header {
   margin: auto;
   height: 20px;
   width: 50px;
-  font-size: 30px;
+  font-size: 50px;
+  font-style: oblique;
   text-align: center;
 }
 
 .column {
-  height: 348px;
-  width: 50px;
+  height: 408px;
+  width: 68px;
   float: left;
   margin: 0;
   padding: 0;
@@ -38,15 +40,35 @@ header {
 .dot {
   float: left;
   position: relative;
-  margin: 10px;;
-  height: 30px;
-  width: 30px;
+  margin: 7px;;
+  height: 50px;
+  width: 50px;
   border: 2px solid black;
   border-radius: 50%;
   background-color: blue;
   list-style: none;
   transition: display 2000ms, top 200ms, right 200ms, left 200ms, bottom 200ms;
+  animation: entering 1000ms;
+  opacity: 1;
 }
+
+@keyframes entering {
+    0% {
+        opacity: 0;
+    }
+    25% {
+        opacity: .25;
+    }
+    50% {
+        opacity: .5;
+    }
+    75% {
+        opacity: .75;
+    }
+    100% {
+        opacity: 1;
+    }
+  }
 
 .dot:hover {
   opacity: .6;

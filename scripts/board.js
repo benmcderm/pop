@@ -12,7 +12,7 @@ function Board() {
 };
 
 function randomColor() {
-  return colors[Math.floor(Math.random() * (colors.length - 1))]
+  return colors[Math.floor(Math.random() * (colors.length))]
 };
 
 Board.prototype.resetBoard = function () {
