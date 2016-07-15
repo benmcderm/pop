@@ -9,7 +9,9 @@ header {
 .title {
   text-align: center;
   margin: auto;
-  font-size: 50px;
+  width: 140px;
+  font-size: 80px;
+  font-weight: lighter;
 }
 
 .board {
@@ -23,10 +25,21 @@ header {
 .score {
   position: relative;
   margin: auto;
-  height: 20px;
+  height: 70px;
   width: 50px;
   font-size: 50px;
   font-style: oblique;
+  text-align: center;
+}
+
+.instructions {
+  margin: auto;
+  height: 200px;
+  width: 500px;
+  font-style: oblique;
+}
+
+.instructions-header {
   text-align: center;
 }
 
@@ -56,7 +69,7 @@ header {
 }
 
 .dot[linked] {
-  opacity: .6;
+  opacity: .5;
 }
 
 @keyframes entering {
