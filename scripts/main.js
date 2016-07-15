@@ -7,4 +7,5 @@ $('document').ready(function() {
 
   document.addEventListener("mousedown", board.onStartDragging.bind(board), false);
   document.addEventListener("mouseup", board.onStopDragging.bind(board), false);
+  
 });
