@@ -10,6 +10,19 @@
     <h1 class="title">pop</h1>
   </header>
   <body>
+
+    <script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyAaH7CddIjf2WNTiEep8wh9v-iVxM0gabM",
+        authDomain: "popjs-d7a09.firebaseapp.com",
+        databaseURL: "https://popjs-d7a09.firebaseio.com",
+        storageBucket: "popjs-d7a09.appspot.com",
+      };
+      firebase.initializeApp(config);
+    </script>
+
     <script src="app/assets/javascripts/bundle.js"></script>
     <div class="board"></div>
     <div class="score"></div>
