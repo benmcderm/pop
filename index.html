@@ -15,21 +15,21 @@
     <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
 
     <script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
+    <script src="app/assets/javascripts/bundle.js"></script>
     <script>
-      // Initialize Firebase
-      let config = {
+      var config = {
         apiKey: "AIzaSyAaH7CddIjf2WNTiEep8wh9v-iVxM0gabM",
         authDomain: "popjs-d7a09.firebaseapp.com",
         databaseURL: "https://popjs-d7a09.firebaseio.com",
         storageBucket: "popjs-d7a09.appspot.com",
       };
+
       firebase.initializeApp(config);
 
-      let database = firebase.database();
-      let auth = firebase.auth();
+      var database = firebase.database();
+      var auth = firebase.auth();
     </script>
 
-    <script src="app/assets/javascripts/bundle.js"></script>
     <div class="game">
       <div class="score-box">
         <div class="scores">
