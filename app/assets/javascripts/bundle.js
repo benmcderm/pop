@@ -10143,6 +10143,10 @@
 
 	'use strict';
 	
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
 	var $ = __webpack_require__(1);
 	var Dot = __webpack_require__(3);
 	var colors = ['red', 'blue', 'yellow', 'green', 'purple'];
@@ -10211,7 +10215,7 @@
 	  database.ref().child("users").orderByChild("score").limitToLast(10).on("value", function (highScores) {
 	    $('.all-scores li').empty();
 	    highScores.forEach(function (user) {
-	      $('.all-scores').append('<li class="individual-high-score">' + user.val().name + ': ' + user.val().score + '</li>');
+	      $('.all-scores').prepend('<li class="individual-high-score">' + user.val().name + ': ' + user.val().score + '</li>');
 	    });
 	  });
 	
@@ -10283,22 +10287,56 @@
 	  }
 	};
 	
-	// function checkForSquare(dot) {
-	//   let sD = [[0,-1], [1,-1], [1,0]];
-	//
-	//   for (var i = 0; i < selectedDots.length; i++) {
-	//     let sdotx = $(selectedDots[i]).attr('pos').slice(0,1)
-	//     let sdoty = $(selectedDots[i]).attr('pos').slice(2)
-	//
-	//     for (var j = 0; j < sD.length; j++) {
-	//       if ((sdotx + sD[i][j]) !== 0 && (sdoty + sD[i][j]) !== 0) {
-	//         console.log("not square!");
-	//       return false;
-	//       }
-	//     }
-	//   }
-	//   return true;
-	// };
+	function extractPos(dot) {
+	  var sdotx = parseInt($(dot).attr('pos').slice(0, 1), 10);
+	  var sdoty = parseInt($(dot).attr('pos').slice(2), 10);
+	  return [sdotx, sdoty];
+	}
+	
+	function checkForSquare() {
+	  var sD = [[0, -1], [1, -1], [1, 0]];
+	
+	  var _loop = function _loop(i) {
+	    var _extractPos = extractPos(selectedDots[i]);
+	
+	    var _extractPos2 = _slicedToArray(_extractPos, 2);
+	
+	    var x1 = _extractPos2[0];
+	    var y1 = _extractPos2[1];
+	
+	
+	    var isSquare = sD.every(function (delta) {
+	      var _delta = _slicedToArray(delta, 2);
+	
+	      var dx = _delta[0];
+	      var dy = _delta[1];
+	
+	      return selectedDots.some(function (dot) {
+	        var _extractPos3 = extractPos(dot);
+	
+	        var _extractPos4 = _slicedToArray(_extractPos3, 2);
+	
+	        var x2 = _extractPos4[0];
+	        var y2 = _extractPos4[1];
+	
+	        return x1 + dx == x2 && y1 + dy == y2;
+	      });
+	    });
+	
+	    if (isSquare) {
+	      return {
+	        v: true
+	      };
+	    }
+	  };
+	
+	  for (var i = 0; i < selectedDots.length; i++) {
+	    var _ret = _loop(i);
+	
+	    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+	  }
+	  return false;
+	};
 	
 	function checkForSimilarity(dots) {
 	  for (var i = 0; i < dots.length - 1; i++) {
@@ -10345,10 +10383,10 @@
 	    return;
 	  }
 	  if (checkForSimilarity(selectedDots)) {
+	    if (checkForSquare()) {
+	      this.score += 4;
+	    }
 	    selectedDots.forEach(function (dot) {
-	      // if (checkForSquare(dot)) {
-	      //   score += 3;
-	      // }
 	      var columnNumber = $(dot).attr('pos').slice(0, 1);
 	      var rowNumber = 5;
 	      _this2.addDot(randomColor(), [columnNumber, rowNumber]);

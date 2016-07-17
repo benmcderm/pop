@@ -67,7 +67,7 @@ Board.prototype.createGame = function() {
   database.ref().child("users").orderByChild("score").limitToLast(10).on("value", function (highScores) {
       $('.all-scores li').empty();
     highScores.forEach((user) => {
-      $('.all-scores').append(`<li class="individual-high-score">${user.val().name}: ${user.val().score}</li>`);
+      $('.all-scores').prepend(`<li class="individual-high-score">${user.val().name}: ${user.val().score}</li>`);
     });
   })
 
@@ -138,22 +138,32 @@ Board.prototype.onDotHover = function (e) {
   }
 };
 
-// function checkForSquare(dot) {
-//   let sD = [[0,-1], [1,-1], [1,0]];
-//
-//   for (var i = 0; i < selectedDots.length; i++) {
-//     let sdotx = $(selectedDots[i]).attr('pos').slice(0,1)
-//     let sdoty = $(selectedDots[i]).attr('pos').slice(2)
-//
-//     for (var j = 0; j < sD.length; j++) {
-//       if ((sdotx + sD[i][j]) !== 0 && (sdoty + sD[i][j]) !== 0) {
-//         console.log("not square!");
-//       return false;
-//       }
-//     }
-//   }
-//   return true;
-// };
+function extractPos(dot) {
+  let sdotx = parseInt($(dot).attr('pos').slice(0,1), 10);
+  let sdoty = parseInt($(dot).attr('pos').slice(2), 10);
+  return [sdotx, sdoty];
+}
+
+function checkForSquare() {
+  let sD = [[0,-1], [1,-1], [1,0]];
+
+  for (let i = 0; i < selectedDots.length; i++) {
+    let [x1, y1] = extractPos(selectedDots[i]);
+
+    let isSquare = sD.every((delta) => {
+      let [dx,dy] = delta;
+      return selectedDots.some((dot) => {
+        let [x2, y2] = extractPos(dot);
+        return x1+dx == x2 && y1+dy == y2;
+      });
+    });
+
+    if (isSquare) {
+      return true;
+    }
+  }
+  return false;
+};
 
 function checkForSimilarity (dots) {
   for (var i = 0; i < dots.length - 1; i++) {
@@ -198,10 +208,10 @@ Board.prototype.onStopDragging = function () {
     return;
   }
   if (checkForSimilarity(selectedDots)) {
+    if (checkForSquare()) {
+      this.score += 4;
+    }
     selectedDots.forEach((dot) => {
-      // if (checkForSquare(dot)) {
-      //   score += 3;
-      // }
       let columnNumber = $(dot).attr('pos').slice(0,1);
       let rowNumber = 5;
       this.addDot(randomColor(), [columnNumber, rowNumber])
