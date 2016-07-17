@@ -3,9 +3,9 @@ const Board = require('./board.js')
 
 $('document').ready(function() {
   let board = new Board();
-  board.populate();
+  board.createGame();
 
   document.addEventListener("mousedown", board.onStartDragging.bind(board), false);
   document.addEventListener("mouseup", board.onStopDragging.bind(board), false);
-  
+
 });

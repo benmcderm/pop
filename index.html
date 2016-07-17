@@ -10,25 +10,42 @@
     <h1 class="title">pop</h1>
   </header>
   <body>
-<<<<<<< HEAD
 
-=======
->>>>>>> master
     <script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
     <script>
       // Initialize Firebase
-      var config = {
+      let config = {
         apiKey: "AIzaSyAaH7CddIjf2WNTiEep8wh9v-iVxM0gabM",
         authDomain: "popjs-d7a09.firebaseapp.com",
         databaseURL: "https://popjs-d7a09.firebaseio.com",
         storageBucket: "popjs-d7a09.appspot.com",
       };
       firebase.initializeApp(config);
+
+      let database = firebase.database();
+      let auth = firebase.auth();
     </script>
+    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
 
     <script src="app/assets/javascripts/bundle.js"></script>
-    <div class="board"></div>
-    <div class="score"></div>
+    <div class="game">
+      <div class="score-box">
+        <div class="scores">
+        <div class="score">
+          <h4>Current Score</h4>
+        </div>
+        <div class="high-score">
+          <h4>High Score</h4>
+        </div>
+        </div>
+      </div>
+      <div class="board"></div>
+      <ul class="all-scores">
+        <h4>All Time High Scores</h4>
+      </ul>
+    </div>
     <div class="instructions">
       <h3 class="instructions-header">Instructions:</h3>
       <ul>

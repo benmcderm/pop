@@ -6,27 +6,76 @@ header {
   margin: auto;
 }
 
+h4 {
+  font-size: 14px;
+}
+
+.game {
+  display: flex;
+  justify-content: space-between;
+}
+
 .title {
   text-align: center;
   margin: auto;
-  width: 140px;
+  width: 100%;
   font-size: 80px;
   font-weight: lighter;
 }
 
 .board {
-  margin: 30px auto;
+  position: relative;
+  order: 2;
+  margin: 30px 0px;
   width: 408px;
-  height: 416px;
+  min-width: 408px;
+  height: 413px;
   transform: rotate(180deg);
   overflow: hidden;
 }
 
+.scores {
+  width: 350px;
+  height: 400px;
+}
+
+.score-box {
+  width: 33%;
+}
+
 .score {
   position: relative;
-  margin: auto;
-  height: 70px;
-  width: 50px;
+  order: 1;
+  float: left;
+  height: 140px;
+  width: 200px;
+  font-size: 50px;
+  font-style: oblique;
+  text-align: center;
+}
+
+.high-score {
+  position: relative;
+  order: 1;
+  float: left;
+  height: 140px;
+  width: 200px;
+  font-size: 50px;
+  font-style: oblique;
+  text-align: center;
+}
+
+.individual-high-score {
+  font-size: 20px;
+}
+
+.all-scores {
+  position: relative;
+  list-style: none;
+  order: 3;
+  float: right;
+  height: 100%;
+  width: 33%;
   font-size: 50px;
   font-style: oblique;
   text-align: center;

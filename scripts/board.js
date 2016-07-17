@@ -3,16 +3,24 @@ const Dot = require('./dot.js');
 const colors = ['red', 'blue', 'yellow', 'green', 'purple'];
 let selectedDots = [];
 let candidates = [];
+let currentUser;
+let highScore = 0;
+let userName;
 
 function Board() {
   this.grid = [];
   this.dragging = false;
   this.score = 0;
-};
+}
 
 function randomColor() {
   return colors[Math.floor(Math.random() * (colors.length))]
-};
+}
+
+function getPlayerName(){
+  let playerName = prompt("Please choose your player's name");
+  return playerName;
+}
 
 Board.prototype.resetBoard = function () {
   $(`li`).removeAttr('pos');
@@ -23,6 +31,50 @@ Board.prototype.resetBoard = function () {
   });
 };
 
+Board.prototype.createGame = function() {
+
+  auth.onAuthStateChanged(function(user) {
+  if (user) {
+      database.ref().child("users/" + user.uid).once("value").then(function (userData) {
+        if (userData.exists()) {
+          highScore = userData.val().score;
+          userName = userData.val().name;
+          currentUser = auth.currentUser;
+          $('.high-score').append(`<div class="current-high">${highScore}</div>`)
+        } else {
+          console.log("We have a user but no data.");
+        }
+      });
+
+    } else {
+
+      auth.signInAnonymously().catch(function(error) {
+        let errorCode = error.code;
+        let errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+      }).then(function (user) {
+        let userName = getPlayerName();
+        database.ref().child("users/" + user.uid).set({
+              name: userName,
+              score: 0
+        });
+        currentUser = auth.currentUser;
+      });
+    }
+  });
+
+  database.ref().child("users").orderByChild("score").limitToLast(10).on("value", function (highScores) {
+      $('.all-scores li').empty();
+    highScores.forEach((user) => {
+      $('.all-scores').append(`<li class="individual-high-score">${user.val().name}: ${user.val().score}</li>`);
+    });
+  })
+
+  this.populate();
+}
+
+
 Board.prototype.populate = function () {
   for (var i = 0; i < 6; i++) {
     $('.board').append(`<ul class='column id${i}'>`);
@@ -31,8 +83,9 @@ Board.prototype.populate = function () {
       let classColor = randomColor();
       this.addDot(classColor, [i,j]);
     }
-  }
-  $('.score').append(`<div>${this.score}</div>`)
+  };
+
+  $('.score').append(`<div class="current-score">${this.score}</div>`)
 };
 
 Board.prototype.addDot = function (color, pos) {
@@ -109,7 +162,7 @@ function checkForSimilarity (dots) {
     }
   }
   return true;
-};
+}
 
 function isAdjacentTo(dot) {
   if (candidates.length === 1) {
@@ -153,8 +206,16 @@ Board.prototype.onStopDragging = function () {
       let rowNumber = 5;
       this.addDot(randomColor(), [columnNumber, rowNumber])
       this.score += 1;
-      $('.score').text(`${this.score}`)
+      $('.current-score').text(`${this.score}`)
       this.removeDot(dot);
+
+      if (this.score > highScore) {
+        database.ref().child("users/" + currentUser.uid).update({
+          score: this.score
+        });
+        $('.current-high').empty();
+        $('.current-high').text(this.score);
+      }
     });
   }
 

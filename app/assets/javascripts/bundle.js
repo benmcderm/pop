@@ -51,7 +51,7 @@
 	
 	$('document').ready(function () {
 	  var board = new Board();
-	  board.populate();
+	  board.createGame();
 	
 	  document.addEventListener("mousedown", board.onStartDragging.bind(board), false);
 	  document.addEventListener("mouseup", board.onStopDragging.bind(board), false);
@@ -10148,16 +10148,24 @@
 	var colors = ['red', 'blue', 'yellow', 'green', 'purple'];
 	var selectedDots = [];
 	var candidates = [];
+	var currentUser = void 0;
+	var highScore = 0;
+	var userName = void 0;
 	
 	function Board() {
 	  this.grid = [];
 	  this.dragging = false;
 	  this.score = 0;
-	};
+	}
 	
 	function randomColor() {
 	  return colors[Math.floor(Math.random() * colors.length)];
-	};
+	}
+	
+	function getPlayerName() {
+	  var playerName = prompt("Please choose your player's name");
+	  return playerName;
+	}
 	
 	Board.prototype.resetBoard = function () {
 	  $('li').removeAttr('pos');
@@ -10168,6 +10176,48 @@
 	  });
 	};
 	
+	Board.prototype.createGame = function () {
+	
+	  auth.onAuthStateChanged(function (user) {
+	    if (user) {
+	      database.ref().child("users/" + user.uid).once("value").then(function (userData) {
+	        if (userData.exists()) {
+	          highScore = userData.val().score;
+	          userName = userData.val().name;
+	          currentUser = auth.currentUser;
+	          $('.high-score').append('<div class="current-high">' + highScore + '</div>');
+	        } else {
+	          console.log("We have a user but no data.");
+	        }
+	      });
+	    } else {
+	
+	      auth.signInAnonymously().catch(function (error) {
+	        var errorCode = error.code;
+	        var errorMessage = error.message;
+	        console.log(errorCode);
+	        console.log(errorMessage);
+	      }).then(function (user) {
+	        var userName = getPlayerName();
+	        database.ref().child("users/" + user.uid).set({
+	          name: userName,
+	          score: 0
+	        });
+	        currentUser = auth.currentUser;
+	      });
+	    }
+	  });
+	
+	  database.ref().child("users").orderByChild("score").limitToLast(10).on("value", function (highScores) {
+	    $('.all-scores li').empty();
+	    highScores.forEach(function (user) {
+	      $('.all-scores').append('<li class="individual-high-score">' + user.val().name + ': ' + user.val().score + '</li>');
+	    });
+	  });
+	
+	  this.populate();
+	};
+	
 	Board.prototype.populate = function () {
 	  for (var i = 0; i < 6; i++) {
 	    $('.board').append('<ul class=\'column id' + i + '\'>');
@@ -10176,8 +10226,9 @@
 	      var classColor = randomColor();
 	      this.addDot(classColor, [i, j]);
 	    }
-	  }
-	  $('.score').append('<div>' + this.score + '</div>');
+	  };
+	
+	  $('.score').append('<div class="current-score">' + this.score + '</div>');
 	};
 	
 	Board.prototype.addDot = function (color, pos) {
@@ -10256,7 +10307,7 @@
 	    }
 	  }
 	  return true;
-	};
+	}
 	
 	function isAdjacentTo(dot) {
 	  if (candidates.length === 1) {
@@ -10302,8 +10353,16 @@
 	      var rowNumber = 5;
 	      _this2.addDot(randomColor(), [columnNumber, rowNumber]);
 	      _this2.score += 1;
-	      $('.score').text('' + _this2.score);
+	      $('.current-score').text('' + _this2.score);
 	      _this2.removeDot(dot);
+	
+	      if (_this2.score > highScore) {
+	        database.ref().child("users/" + currentUser.uid).update({
+	          score: _this2.score
+	        });
+	        $('.current-high').empty();
+	        $('.current-high').text(_this2.score);
+	      }
 	    });
 	  }
 	
