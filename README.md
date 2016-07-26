@@ -19,3 +19,5 @@ The game relies heavily on jQuery and JavaScript to respond to user interaction.
 };`
 
 Another design tactic was to create dots above the board and have them fall into place (think Connect 4).  This worked quite well with apart from the fact that the game border was then clearly defined as dots passed it.  To overcome this unoptimized transition, whenever a dot is created, it slowly fades into the frame, allowing it enough time to pass the top border and fall into place.  This makes for a clean transition and smoother gameplay.
+
+![Pop](/images/pop-gameplay.gif?raw=true "Pop")
