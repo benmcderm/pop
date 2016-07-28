@@ -42,11 +42,7 @@ Board.prototype.createGame = function() {
           currentUser = auth.currentUser;
           $('.high-score').append(`<div class="current-high">${highScore}</div>`)
         } else {
-          firebase.auth().signOut().then(function() {
-            console.log('Signed Out');
-          }, function(error) {
-            console.error('Sign Out Error', error);
-          });
+          auth.signOut();
         }
       });
 
