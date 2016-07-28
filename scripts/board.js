@@ -42,7 +42,7 @@ Board.prototype.createGame = function() {
           currentUser = auth.currentUser;
           $('.high-score').append(`<div class="current-high">${highScore}</div>`)
         } else {
-          console.log("We have a user but no data.");
+          auth.signOut();
         }
       });
 
