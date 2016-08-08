@@ -50,12 +50,11 @@
 	var Board = __webpack_require__(2);
 	
 	$('document').ready(function () {
-	
 	  var board = new Board();
 	  board.createGame();
 	
-	  document.addEventListener("mousedown", board.onStartDragging.bind(board), false);
-	  document.addEventListener("mouseup", board.onStopDragging.bind(board), false);
+	  document.addEventListener('mousedown', board.onStartDragging.bind(board), false);
+	  document.addEventListener('mouseup', board.onStopDragging.bind(board), false);
 	});
 
 /***/ },
@@ -10176,13 +10175,12 @@
 	  $('li').removeAttr('pos');
 	  $('ul').each(function (i) {
 	    $(this).children().each(function (j) {
-	      $(this).attr('pos', i + ',' + j);
+	      $(this).attr('pos', i + ', ' + j);
 	    });
 	  });
 	};
 	
 	Board.prototype.createGame = function () {
-	
 	  auth.onAuthStateChanged(function (user) {
 	    if (user) {
 	      database.ref().child("users/" + user.uid).once("value").then(function (userData) {

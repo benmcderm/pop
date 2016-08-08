@@ -14,25 +14,24 @@ function Board() {
 }
 
 function randomColor() {
-  return colors[Math.floor(Math.random() * (colors.length))]
+  return colors[Math.floor(Math.random() * (colors.length))];
 }
 
-function getPlayerName(){
+function getPlayerName() {
   let playerName = prompt("Please choose your player's name");
   return playerName;
 }
 
 Board.prototype.resetBoard = function () {
-  $(`li`).removeAttr('pos');
-  $(`ul`).each(function (i) {
-    $(this).children().each(function(j) {
-      $(this).attr('pos', `${i},${j}`);
-    })
+  $('li').removeAttr('pos');
+  $('ul').each(function (i) {
+    $(this).children().each(function (j) {
+      $(this).attr('pos', `${i}, ${j}`);
+    });
   });
 };
 
-Board.prototype.createGame = function() {
-
+Board.prototype.createGame = function () {
   auth.onAuthStateChanged(function(user) {
   if (user) {
       database.ref().child("users/" + user.uid).once("value").then(function (userData) {
@@ -42,7 +41,7 @@ Board.prototype.createGame = function() {
           currentUser = auth.currentUser;
           $('.high-score').append(`<div class="current-high">${highScore}</div>`)
         } else {
-          auth.signOut();
+          console.log("We have a user but no data.");
         }
       });
 
@@ -212,16 +211,16 @@ Board.prototype.onStopDragging = function () {
       this.score += 4;
     }
     selectedDots.forEach((dot) => {
-      let columnNumber = $(dot).attr('pos').slice(0,1);
-      let rowNumber = 5;
-      this.addDot(randomColor(), [columnNumber, rowNumber])
+      const columnNumber = $(dot).attr('pos').slice(0, 1);
+      const rowNumber = 5;
+      this.addDot(randomColor(), [columnNumber, rowNumber]);
       this.score += 1;
-      $('.current-score').text(`${this.score}`)
+      $('.current-score').text(`${this.score}`);
       this.removeDot(dot);
 
       if (this.score > highScore) {
         database.ref().child("users/" + currentUser.uid).update({
-          score: this.score
+          score: this.score,
         });
         $('.current-high').empty();
         $('.current-high').text(this.score);

@@ -1,4 +1,4 @@
-function Dot(color, position){
+function Dot(color, position) {
   this.color = color;
   this.position = position;
 }
