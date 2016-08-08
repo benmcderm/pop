@@ -1,7 +1,7 @@
 const $ = require('jquery');
 const Board = require('./board.js');
 
-$('document').ready(function() {
+$('document').ready(() => {
   const board = new Board();
   board.createGame();
 

@@ -22,20 +22,20 @@ function getPlayerName() {
   return playerName;
 }
 
-Board.prototype.resetBoard = function () {
+Board.prototype.resetBoard = () => {
   $('li').removeAttr('pos');
-  $('ul').each(function (i) {
-    $(this).children().each(function (j) {
+  $('ul').each(i => {
+    $(this).children().each(j => {
       $(this).attr('pos', `${i}, ${j}`);
     });
   });
 };
 
 Board.prototype.createGame = () => {
-  auth.onAuthStateChanged((user) => {
+  auth.onAuthStateChanged(user => {
     if (user) {
       database.ref().child(`users/${user.uid}`).once('value').
-      then((userData) => {
+      then(userData => {
         if (userData.exists()) {
           highScore = userData.val().score;
           userName = userData.val().name;
@@ -46,12 +46,12 @@ Board.prototype.createGame = () => {
         }
       });
     } else {
-      auth.signInAnonymously().catch(function(error) {
+      auth.signInAnonymously().catch(error => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode);
         console.log(errorMessage);
-      }).then((user) => {
+      }).then(user => {
         userName = getPlayerName();
         database.ref().child(`users/${user.uid}`).set({
           name: userName,
@@ -63,7 +63,7 @@ Board.prototype.createGame = () => {
   });
 
   database.ref().child('users').orderByChild('score').limitToLast(10).
-  on('value', (highScores) => {
+  on('value', highScores => {
     $('.all-scores li').empty();
     highScores.forEach((user) => {
       $('.all-scores').prepend(`<li class="individual-high-score">
@@ -75,104 +75,52 @@ Board.prototype.createGame = () => {
 };
 
 
-Board.prototype.populate = function () {
-  for (var i = 0; i < 6; i++) {
+Board.prototype.populate = () => {
+  for (let i = 0; i < 6; i++) {
     $('.board').append(`<ul class='column id${i}'>`);
     this.grid[i] = [];
-    for (var j = 0; j < 6; j++) {
-      let classColor = randomColor();
-      this.addDot(classColor, [i,j]);
+    for (let j = 0; j < 6; j++) {
+      const classColor = randomColor();
+      this.addDot(classColor, [i, j]);
     }
-  };
+  }
 
-  $('.score').append(`<div class="current-score">${this.score}</div>`)
+  $('.score').append(`<div class="current-score">${this.score}</div>`);
 };
 
-Board.prototype.addDot = function (color, pos) {
+Board.prototype.addDot = (color, pos) => {
   this.setDot(new Dot(color, pos), pos);
-  let stringPosition = `${pos[0]},${pos[1]}`;
-  let dotElement = $(`<li pos="${stringPosition}" class='dot ${color}'>`);
+  const stringPosition = `${pos[0]},${pos[1]}`;
+  const dotElement = $(`<li pos="${stringPosition}" class='dot ${color}'>`);
   dotElement.hover(this.onDotHover.bind(this));
   $(`.id${pos[0]}`).append(dotElement);
 };
 
-Board.prototype.removeDot = function (pos) {
-  let newPos = $(pos).attr('pos');
+Board.prototype.removeDot = pos => {
+  const newPos = $(pos).attr('pos');
   this.setDot(undefined, newPos);
-  $(pos).hide('medium', () =>{
+  $(pos).hide('medium', () => {
     $(pos).remove();
     this.resetBoard();
   });
 };
 
-Board.prototype.getDot = function(pos) {
-  let y = pos[0];
-  let x = pos[1];
-  this.grid[y][x];
+Board.prototype.getDot = pos => {
+  const y = pos[0];
+  const x = pos[1];
+  return this.grid[y][x];
 };
 
-Board.prototype.setDot = function(dot, pos) {
-  let y = pos[0];
-  let x = pos[1];
+Board.prototype.setDot = (dot, pos) => {
+  const y = pos[0];
+  const x = pos[1];
   this.grid[y][x] = dot;
 };
 
-Board.prototype.onStartDragging = function (e) {
+Board.prototype.onStartDragging = e => {
   e.preventDefault();
   this.dragging = true;
 };
-
-Board.prototype.onDotHover = function (e) {
-  if (this.dragging) {
-    if (!candidates.includes(e.currentTarget)) {
-      candidates.push(e.currentTarget);
-      if (isAdjacentTo(e.currentTarget)) {
-        if (checkForSimilarity(candidates)) {
-          selectedDots.push(e.currentTarget)
-          $(e.currentTarget).attr('linked', 'true')
-        }
-      } else {
-        candidates.pop();
-      }
-    }
-  }
-};
-
-function extractPos(dot) {
-  let sdotx = parseInt($(dot).attr('pos').slice(0,1), 10);
-  let sdoty = parseInt($(dot).attr('pos').slice(2), 10);
-  return [sdotx, sdoty];
-}
-
-function checkForSquare() {
-  let sD = [[0,-1], [1,-1], [1,0]];
-
-  for (let i = 0; i < selectedDots.length; i++) {
-    let [x1, y1] = extractPos(selectedDots[i]);
-
-    let isSquare = sD.every((delta) => {
-      let [dx,dy] = delta;
-      return selectedDots.some((dot) => {
-        let [x2, y2] = extractPos(dot);
-        return x1+dx == x2 && y1+dy == y2;
-      });
-    });
-
-    if (isSquare) {
-      return true;
-    }
-  }
-  return false;
-};
-
-function checkForSimilarity (dots) {
-  for (var i = 0; i < dots.length - 1; i++) {
-    if($(dots[i]).attr('class').slice(3) !== $(dots[i+1]).attr('class').slice(3)) {
-      return false;
-    }
-  }
-  return true;
-}
 
 function isAdjacentTo(dot) {
   if (candidates.length === 1) {
@@ -194,6 +142,58 @@ function isAdjacentTo(dot) {
     }
   }
   return adjacent;
+}
+
+function checkForSimilarity(dots) {
+  for (let i = 0; i < dots.length - 1; i++) {
+    if ($(dots[i]).attr('class').slice(3) !== $(dots[i + 1]).attr('class').slice(3)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+Board.prototype.onDotHover = e => {
+  if (this.dragging) {
+    if (!candidates.includes(e.currentTarget)) {
+      candidates.push(e.currentTarget);
+      if (isAdjacentTo(e.currentTarget)) {
+        if (checkForSimilarity(candidates)) {
+          selectedDots.push(e.currentTarget);
+          $(e.currentTarget).attr('linked', 'true');
+        }
+      } else {
+        candidates.pop();
+      }
+    }
+  }
+};
+
+function extractPos(dot) {
+  const sdotx = parseInt($(dot).attr('pos').slice(0, 1), 10);
+  const sdoty = parseInt($(dot).attr('pos').slice(2), 10);
+  return [sdotx, sdoty];
+}
+
+function checkForSquare() {
+  const sD = [[0, -1], [1, -1], [1, 0]];
+
+  for (let i = 0; i < selectedDots.length; i++) {
+    const [x1, y1] = extractPos(selectedDots[i]);
+
+    const isSquare = sD.every(delta => {
+      const [dx, dy] = delta;
+      return selectedDots.some(dot => {
+        const [x2, y2] = extractPos(dot);
+        return x1 + dx === x2 && y1 + dy === y2;
+      });
+    });
+
+    if (isSquare) {
+      return true;
+    }
+  }
+  return false;
 }
 
 Board.prototype.onStopDragging = function () {

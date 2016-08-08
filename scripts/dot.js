@@ -3,7 +3,7 @@ function Dot(color, position) {
   this.position = position;
 }
 
-Dot.prototype.sameColor = function (anotherDot) {
+Dot.prototype.sameColor = anotherDot => {
   return this.color === anotherDot.color;
 };
 
