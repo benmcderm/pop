@@ -18,7 +18,7 @@ function randomColor() {
 }
 
 function getPlayerName() {
-  let playerName = prompt("Please choose your player's name");
+  const playerName = prompt("Please choose your player's name");
   return playerName;
 }
 
@@ -31,47 +31,48 @@ Board.prototype.resetBoard = function () {
   });
 };
 
-Board.prototype.createGame = function () {
-  auth.onAuthStateChanged(function(user) {
-  if (user) {
-      database.ref().child("users/" + user.uid).once("value").then(function (userData) {
+Board.prototype.createGame = () => {
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      database.ref().child(`users/${user.uid}`).once('value').
+      then((userData) => {
         if (userData.exists()) {
           highScore = userData.val().score;
           userName = userData.val().name;
           currentUser = auth.currentUser;
-          $('.high-score').append(`<div class="current-high">${highScore}</div>`)
+          $('.high-score').append(`<div class="current-high">${highScore}</div>`);
         } else {
-          console.log("We have a user but no data.");
+          console.log('We have a user but no data.');
         }
       });
-
     } else {
-
       auth.signInAnonymously().catch(function(error) {
-        let errorCode = error.code;
-        let errorMessage = error.message;
+        const errorCode = error.code;
+        const errorMessage = error.message;
         console.log(errorCode);
         console.log(errorMessage);
-      }).then(function (user) {
-        let userName = getPlayerName();
-        database.ref().child("users/" + user.uid).set({
-              name: userName,
-              score: 0
+      }).then((user) => {
+        userName = getPlayerName();
+        database.ref().child(`users/${user.uid}`).set({
+          name: userName,
+          score: 0,
         });
         currentUser = auth.currentUser;
       });
     }
   });
 
-  database.ref().child("users").orderByChild("score").limitToLast(10).on("value", function (highScores) {
-      $('.all-scores li').empty();
+  database.ref().child('users').orderByChild('score').limitToLast(10).
+  on('value', (highScores) => {
+    $('.all-scores li').empty();
     highScores.forEach((user) => {
-      $('.all-scores').prepend(`<li class="individual-high-score">${user.val().name}: ${user.val().score}</li>`);
+      $('.all-scores').prepend(`<li class="individual-high-score">
+      ${user.val().name}: ${user.val().score}</li>`);
     });
-  })
+  });
 
   this.populate();
-}
+};
 
 
 Board.prototype.populate = function () {
@@ -178,14 +179,13 @@ function isAdjacentTo(dot) {
     return true;
   }
   let adjacent = false;
-  let directions = [[0,1], [1,0], [-1,0], [0,-1]];
-  let dotx = $(dot).attr('pos').slice(0,1);
-  let doty = $(dot).attr('pos').slice(2);
+  const directions = [[0, 1], [1, 0], [-1, 0], [0, -1]];
+  const dotx = $(dot).attr('pos').slice(0, 1);
+  const doty = $(dot).attr('pos').slice(2);
 
   for (let i = 0; i < candidates.length; i++) {
-
-    let candidatex = $(candidates[i]).attr('pos').slice(0,1)
-    let candidatey = $(candidates[i]).attr('pos').slice(2)
+    const candidatex = $(candidates[i]).attr('pos').slice(0, 1);
+    const candidatey = $(candidates[i]).attr('pos').slice(2);
 
     for (let j = 0; j < directions.length; j++) {
       if (directions[j][0] === (dotx - candidatex) && directions[j][1] === (doty - candidatey)) {
@@ -194,11 +194,11 @@ function isAdjacentTo(dot) {
     }
   }
   return adjacent;
-};
+}
 
 Board.prototype.onStopDragging = function () {
   this.dragging = false;
-  for (var i = 0; i < selectedDots.length; i++) {
+  for (let i = 0; i < selectedDots.length; i++) {
     $(selectedDots[i]).removeAttr('linked');
   }
   if (selectedDots.length < 2) {
